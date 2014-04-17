@@ -1,0 +1,26 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>
+        translate
+    </title>
+</head>
+<body>
+    <p>{% trans "This is the title." %}</p>
+    <p>{% trans context %}</p>
+
+    {% get_available_languages as languages %}
+    {% trans "View this category in:" %}
+    {% for lang_code, lang_name in languages %}
+        <p>
+            {% language lang_code %}
+                {{ lang_code }} -- {{ lang_name }}
+{#                <a href="{% url 'category' slug=category.slug %}">{{ lang_name }}</a>#}
+            {% endlanguage %}
+        </p>
+    {% endfor %}
+
+</body>
+</html>

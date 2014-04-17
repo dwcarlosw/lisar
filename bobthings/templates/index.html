@@ -1,0 +1,343 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html>
+<head>
+    {% load staticfiles %}
+    <meta charset="UTF-8">
+{#    <link rel="stylesheet" href="static/css/header.css" type="text/css"/>#}
+    <link rel="stylesheet" href="{% static "header.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "bobthings.css" %}" type="text/css"/>
+    <link rel="stylesheet" href="{% static "footer.css" %}" type="text/css"/>
+    <script src="{% static "bobthings.js" %}"></script>
+    <title>
+        bobthings
+    </title>
+
+{#    {% for a in al %}#}
+{#        <li><a>{{a}}</a></li>#}
+{#    {% endfor %}#}
+</head>
+
+<body>
+    <div id="big_wrapper">
+        <div id="div_header" >
+            <header id="top_header">
+                <li><img id="header_logo" src="{% static "riddle.jpg" %}"></li>
+                <h1 id="header_title">Welcome to bobthings</h1>
+                <nav id="top_menu">
+                    <ul>
+                        <li id="menu_item"><a href="/">Home</a></li>
+                        <li id="menu_item"><a href="#">Profile</a></li>
+                        <li id="menu_item"><a href="#">Podcast</a></li>
+                    </ul>
+                </nav>
+            </header>
+
+        </div>
+
+        <div id="new_div">
+            <section id="main_section">
+
+            <p>{% trans "This is the title." %}</p>
+            <p>{% trans context %}</p>
+            <article>
+                <header>
+                    <hgroup>
+                        <h1>{% trans "View this category in:" %}</h1>
+{#                            <h1>{{atc.title}}</h1>#}
+{#                            <h2>{{new.title}}</h2>#}
+                    </hgroup>
+                    <p>
+                        {% get_available_languages as languages %}
+                        {% for lang_code, lang_name in languages %}
+                            <p>
+                                {% language lang_code %}
+                                    {{ lang_code }} -- {{ lang_name }}
+{#                                <a href="{% url 'category' slug=category.slug %}">{{ lang_name }}</a>#}
+                                {% endlanguage %}
+                            </p>
+                        {% endfor %}
+                    </p>
+                    <footer>
+                        <p>- Written by {% trans atc.created_by %}</p>
+                    </footer>
+
+                </header>
+            </article>
+
+
+            {% for atc in results.articles %}
+                <article>
+                    <header>
+                        <hgroup>
+                            <h1>{% trans atc.title %}</h1>
+{#                            <h1>{{atc.title}}</h1>#}
+{#                            <h2>{{new.title}}</h2>#}
+                        </hgroup>
+                        <p>
+                            {% trans atc.article %}
+{#                            {{atc.article}}#}
+                        </p>
+                        <footer>
+                            <p>- Written by {% trans atc.created_by %}</p>
+{#                            <p>- Written by {{atc.created_by}}</p>#}
+                        </footer>
+
+                    </header>
+                </article>
+		    {% endfor %}
+
+{#            <article>#}
+{#                <header>#}
+{#                    <hgroup>#}
+{#                        <h1>This is a canvas.</h1>#}
+{#                        <h2>Here is the canvas.</h2>#}
+{#                    </hgroup>#}
+{#                    <p>#}
+{#                        <canvas id="canvas" width="600" height="400">#}
+{#                            hopefully you dont see this, if you do, get google chrome.#}
+{#                        </canvas>#}
+{#                    </p>#}
+{#                    <footer>#}
+{#                        <p>- Written by Carlos Yiqiu Wang</p>#}
+{#                    </footer>#}
+{#                </header>#}
+{#            </article>#}
+{##}
+{#            <article>#}
+{#                <header>#}
+{#                    <hgroup>#}
+{#                        <h1>This is my favorite mtv.</h1>#}
+{#                        <h2>I am woman.</h2>#}
+{#                    </hgroup>#}
+{#                    <p>#}
+{#                        <section id="skin">#}
+{#                            <video id="myMovie" width="640" height="360">#}
+{#                                <source src="{% static "Kiss.mp4" %}" type="video/mp4">#}
+{#                            </video>#}
+{#                            <nav>#}
+{#                                <div id="buttons">#}
+{#                                    <button type="button" id="playButton">Play</button>#}
+{#                                </div>#}
+{#                                <div id="defaultBar">#}
+{#                                    <div id="progressBar"></div>#}
+{#                                </div>#}
+{#                                <div style="clear:both"></div>#}
+{#                            </nav>#}
+{#                        </section>#}
+{#                    </p>#}
+{#                    <footer>#}
+{#                        <p>- Written by Carlos Yiqiu Wang</p>#}
+{#                    </footer>#}
+{#                </header>#}
+{#            </article>#}
+{##}
+{#            <article>#}
+{#                <header>#}
+{#                    <hgroup>#}
+{#                        <h1>2 Boxes.</h1>#}
+{#                        <h2>Hi boxes.</h2>#}
+{#                    </hgroup>#}
+{#                    <p>#}
+{#                        <section id="leftbox">#}
+{#                            Put me here.#}
+{#                        </section>#}
+{#                        <section id="rightbox">#}
+{#                            <img style = "width:100%;" id = "facepic" src="{% static "me.jpg" %}">#}
+{#                        </section>#}
+{#                    </p>#}
+{#                    <footer>#}
+{#                        <p>- Written by Carlos Yiqiu Wang</p>#}
+{#                    </footer>#}
+{#                </header>#}
+{##}
+{#            </article>#}
+{##}
+{#            <article>#}
+{#                <header>#}
+{#                    <hgroup>#}
+{#                        <h1>Web storage API.</h1>#}
+{#                        <h2>Web storage API.</h2>#}
+{#                    </hgroup>#}
+{#                    <p>#}
+{#                        <section id="leftbox2">#}
+{#                            <form>#}
+{#                                <p>(key) One: <input type="text" id="one"></p>#}
+{#                                <p>(value) Two: <textarea id="two"></textarea></p>#}
+{#                                <p><input type="button" id="button" value="Save"></p>#}
+{#                            </form>#}
+{#                        </section>#}
+{#                        <section id="rightbox2">#}
+{#                            Nothing yet hoss!#}
+{#                        </section>#}
+{#                    </p>#}
+{#                    <footer>#}
+{#                        <p>- Written by Carlos Yiqiu Wang</p>#}
+{#                    </footer>#}
+{#                </header>#}
+{##}
+{##}
+{#            </article>#}
+
+
+        </section>
+
+            <aside id="side_news">
+                {% for sn in results.sidenews %}
+                    <article>
+                        <h4>{{ sn.title }}</h4>
+                        <p>{{ sn.article }}</p>
+                    </article>
+                {% endfor %}
+
+            </aside>
+
+        </div>
+
+
+
+        <img id="footer_arrow" src="{% static "arrow.png" %}" width="100px" height="20px">
+        <div id="footer">
+            <ul id="footer_menu">
+                <li class="homeButton"><a href="/bobthings/"></a></li>
+
+                <!-- Account Button -->
+                <li class="menu_item"><a href="#">Account</a>
+                    <div id = "item_msg" class="one_column_layout">
+                        <div class="col_1">
+                            <a class="headerLinks">Stream</a>
+
+                            <a class="headerLinks">Messages</a>
+                            <a class="listLinks" style="font-weight:bold;color:white;">Inbox (5)</a>
+                            <a class="listLinks">Sent</a>
+                            <a class="listLinks">Trash</a>
+                            <a class="listLinks">Compose</a>
+                        </div>
+                    </div>
+                </li>
+
+                <!-- Profile Button -->
+                <li class="menu_item"><a href="#">Profile</a>
+                    <div class="three_column_layout">
+
+                        <div class="col_3">
+                            <h2>Example of Three Columns</h2>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="col_1">
+                            <p>I love tuba so much</p>
+                        </div>
+                        <div class="col_1">
+                            <p>I love bacon so much</p>
+                        </div>
+                        <div class="col_1">
+                            <p>I love yo mama so much</p>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="col_1">
+                            <p class="black_box">I am a single column black box</p>
+                        </div>
+                        <div class="col_2">
+                            <p>I am outside the black box but on the same row</p>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="col_3">
+                            <h2>My Profile</h2>
+                        </div>
+
+                        <div class="clear"></div>
+
+                        <div class="col_3">
+                            <p>
+                                <img src="#" class="img_left whiteBorder" />
+                                <a href="#" style="display:inline;font-weight:bold;color:white;">Carlos Yiqiu Wang</a>
+                                <a href="#">Read more...</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </li>
+
+                <!-- Program Button -->
+                <li class="menu_item"><a href="#">Applications</a>
+                    <ul class="dropup">
+                        <li><a href="#">Group Chat</a></li>
+                        <li><a href="#">Instant Messenger</a></li>
+                        <li><a href="#">Meme Generator</a></li>
+                        <li><a href="#">Forum</a></li>
+                    </ul>
+                </li>
+
+                <!-- Program Button -->
+                <li class="menu_item"><a href="#">Languages</a>
+                    <ul class="dropup">
+                        <li><a class="lan_a" href="#" onclick="on_choose_language(this);">English</a></li>
+                        <li><a class="lan_a" href="#" onclick="on_choose_language(this);">Chinese Simplifed</a></li>
+                        <li><a class="lan_a" href="#" onclick="on_choose_language(this);">France</a></li>
+                    </ul>
+                </li>
+
+                <!-- Log Out Button -->
+                <li class="right"><a href="#">Log Out</a></li>
+
+            </ul>
+
+            <ul id="notifications">
+                <li><a href="#" class="notificationIcons"><img src="#"></a></li>
+                <li><a href="#" class="notificationIcons"><img src="#"></a></li>
+                <li>
+                    <a href="#" class="notificationIcons"><img src="#">
+                        <span>
+                            <img src="defaultProfile.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                            <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                            liked your post "My name is Yiqiu this is a post":
+                            <hr style="border:none;border-bottom:1px solid #777777;" />
+                            <img src="defaultProfile.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                            <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                            liked your post "My name is Yiqiu this is a post":
+                            <hr style="border:none;border-bottom:1px solid #777777;" />
+                            <img src="defaultProfile.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                            <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                            liked your post "My name is Yiqiu this is a post":
+                            <hr style="border:none;border-bottom:1px solid #777777;" />
+                        </span>
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+
+    </div>
+
+
+
+{#    <ul>#}
+{#        <p>Click the button to display the date.</p>#}
+{#        <p id="demo"></p>#}
+{#        <button type="button" onclick="showDate('demo')">Try it</button>#}
+{#    </ul>#}
+{##}
+{#    <p>#}
+{#    <audio controls>#}
+{#        <source src="{% static "doyouhearme.mp3" %}" type="audio/mpeg">#}
+{#    </audio>#}
+{#    </p>#}
+{#    <p>#}
+{#        <img src="{% static "violanteplacido51189.jpg" %}" alt="My image" />#}
+{#    </p>#}
+{##}
+{#    <video width="500" height="375" controls>#}
+{#       <source src="{% static "Kiss.MP4" %}" type="video/mp4">#}
+{##}
+{#       Your browser does not support the video tag.#}
+{#    </video>#}
+
+</body>
+</html>
+
