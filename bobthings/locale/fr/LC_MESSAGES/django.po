@@ -2,31 +2,49 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-# 
+#
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-04-16 16:33-0400\n"
-"PO-Revision-Date: 2014-04-16 20:35+0000\n"
+"POT-Creation-Date: 2014-05-07 13:13-0400\n"
+"PO-Revision-Date: 2014-04-23 21:13+0000\n"
 "Last-Translator:   <>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Translated-Using: django-rosetta 0.7.4\n"
 
-#: views.py:104
-msgid "Hello there."
-msgstr "Bonjour il."
+#: templates/bobthings.html:5
+msgid "bobthings"
+msgstr "bobthings"
 
-#: templates/index.html:41
-msgid "This is the title."
-msgstr "C'est le titre."
+#: templates/bobthings.html:8
+msgid "Welecome to bobthings"
+msgstr "Welecome à bobthingsssssssssssssssssss"
 
-#: templates/index.html:46
+#: templates/bobthings.html:17
+msgid "This is a static title"
+msgstr "Il s'agit d'un titre statique"
+
+#: templates/bobthings.html:18
 msgid "View this category in:"
 msgstr "Voir cette catégorie:"
+
+#: templates/bobthings.html:46
+msgid "This is a static sub-title."
+msgstr "Il s'agit d'un sous-titre statique."
+
+#: templates/bobthings.html:52
+msgid "Written by"
+msgstr "écrit par"
+
+#~ msgid "Add Comments:"
+#~ msgstr "Ajouter des commentaires:"
+
+#~ msgid "Hello there."
+#~ msgstr "Bonjour il."

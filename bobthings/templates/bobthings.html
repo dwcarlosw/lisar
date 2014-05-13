@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block block_wnd_title %}
+    {% trans "bobthings" %}
+{% endblock %}
+
+{% block block_title %}{% trans "Welecome to bobthings" %}{% endblock %}
+
+{% block block_script %}{% include 'comment-js.html' %}{% endblock %}
+
+{% block block_main_section %}
+    <p>{% trans context %}</p>
+    <article>
+        <header>
+            <hgroup>
+                <h1>{% trans "This is a static title" %}</h1>
+                <h2>{% trans "View this category in:" %}</h2>
+{#                <h1>{{atc.title}}</h1>#}
+{#                <h2>{{new.title}}</h2>#}
+            </hgroup>
+            <p>
+                {% get_available_languages as languages %}
+                {% for lang_code, lang_name in languages %}
+                    <p>
+                        {% language lang_code %}
+                            {{ lang_code }} -- {{ lang_name }}
+                        {% endlanguage %}
+                    </p>
+                {% endfor %}
+
+            </p>
+            <footer>
+                <p>- Written by {% trans atc.created_by %}</p>
+            </footer>
+
+        </header>
+    {% include 'comment.html' %}
+    </article>
+
+    {% for atc in articles %}
+        <article>
+            <header>
+                <hgroup>
+                    <h1>{{atc.art.title}}</h1>
+                    <h2>{% trans "This is a static sub-title." %}</h2>
+                </hgroup>
+                <p>
+                    {{atc.art.article}}
+                </p>
+                <footer>
+                    <p>-{% trans "Written by" %} -- {{atc.art.created_by}}</p>
+                </footer>
+
+            </header>
+            {% include 'comment.html' %}
+        </article>
+    {% endfor %}
+
+{% endblock %}
+
+
+{% block block_sidenews %}
+    {% for atc in sidenews %}
+        <article>
+            <h4>{{ atc.art.title }}</h4>
+            <p>{{ atc.art.article }}</p>
+            {% include 'comment.html' %}
+        </article>
+    {% endfor %}
+{% endblock %}

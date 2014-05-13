@@ -1,0 +1,205 @@
+
+/**{*/
+    /*margin: 0px;*/
+    /*padding: 0px;*/
+/*}*/
+
+/*h1{*/
+    /*font: bold 20px Tahoma;*/
+/*}*/
+/*h2{*/
+    /*font: bold 14px Tahoma;*/
+/*}*/
+/*header, section, footer, aside, nav, article, hgroup{*/
+    /*display:block;*/
+/*}*/
+
+/*body{*/
+    /*text-align: center;*/
+/*}*/
+/*#big_wrapper{*/
+    /*border: 1px solid black;*/
+    /*width: 1000px;*/
+    /*margin: 20px auto;*/
+    /*text-align: left;*/
+
+/*}*/
+/*#top_header{*/
+    /*background: yellow;*/
+    /*border: 1px solid blue;*/
+    /*padding: 20px;*/
+/*}*/
+/*#top_menu{*/
+    /*background: blue;*/
+    /*color: white;*/
+/*}*/
+/*#top_menu li{*/
+    /*display: inline-block;*/
+    /*list-style: none;*/
+    /*padding: 5px;*/
+    /*font: bold 14px Tahoma;*/
+/*}*/
+/*#main_section{*/
+    /*float: left;*/
+    /*width: 660px;*/
+    /*margin: 30px; *//* 720px, 280 left */
+/*}*/
+
+/*#side_news{*/
+    /*float: left;*/
+    /*width: 220px;*/
+    /*margin: 20px 0px;*/
+    /*padding: 30px;*/
+    /*background: #66CCCC;*/
+/*}*/
+/*#the_footer{*/
+    /*clear: both;*/
+    /*text-align: center;*/
+    /*padding: 20px;*/
+    /*border-top: 2px solid green;*/
+/*}*/
+/*article{*/
+    /*background: #FFFBCC;*/
+    /*border: 1px solid red;*/
+    /*padding: 20px;*/
+    /*margin-bottom: 15px;*/
+/*}*/
+/*article footer{*/
+    /*text-align: right;*/
+/*}*/
+
+/*p.bucky ~ p {color:blue;}*/
+
+/*#tuna{*/
+
+    /*color:red;*/
+/*}*/
+/*button:hover{ color: blue; }*/
+
+
+*{
+    margin:0px;
+    padding:0px;
+}
+h1{
+    font: bold 20px Tahoma;
+}
+h2{
+    font: bold 14px Tahoma;
+}
+head, section, footer, aside, nav, article, hgroup{
+    display:block;
+}
+
+article{
+    clear:both;
+    margin: 20px 0px;
+    padding: 30px;
+    background: rgba(220, 220, 220, 0.3);
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+}
+
+footer{
+    clear:both;
+}
+
+body{
+    width:100%;
+    /*display:-webkit-box;*/
+    -webkit-box-pack: center;
+    background : url('/static/001-wood-melamine-subttle-pattern-background-pat.jpg');
+    /*background-attachment:fixed;*/
+    background-repeat:repeat;
+}
+
+#big_wrapper{
+    max-width: 1200px;
+    margin: 20px auto;
+    display:-webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-box-flex: 1;
+}
+
+#new_div{
+    margin-top: 30px;
+    display:-webkit-box;
+    -webkit-box-orient:horizontal;
+}
+
+#main_section{
+    border:1px solid blue;
+    -webkit-box-flex: 1;
+    margin: 20px;
+    padding: 20px;
+}
+
+#side_news{
+    /*border: 1px solid red;*/
+    width: 220px;
+    margin: 20px 0px;
+    padding: 30px;
+    background: rgba(220, 220, 220, 0.3);
+
+    box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+}
+
+#sink{
+    width:700px;
+    margin:10px auto;
+    padding:5px;
+    backgound:#B7B7B7;
+    border:2px solid black;
+    border-radius:5px;
+}
+nav{
+    /*margin:5px 0px;*/
+}
+#buttons{
+    float:left;
+    width:70px;
+    height:22px;
+}
+#defaultBar{
+    position:relative;
+    float:left;
+    width:600px;
+    height:16px;
+    padding:4px;
+    border:2px solid black;
+    background:yellow;
+}
+#progressBar{
+    position:absolute;
+    width:0px;
+    height: 16px;
+    background:blue;
+}
+
+#leftbox{
+    float:left;
+    width:150px;
+    height:100px;
+    margin:5px;
+    border:2px solid blue;
+}
+
+#rightbox{
+    float:left;
+    width:150px;
+    height:100px;
+    margin:5px;
+    border:2px solid green;
+}
+
+#leftbox2{
+    float:left;
+    padding:20px;
+    border:3px solid red;
+}
+#rightbox2{
+    float:left;
+    width:250px;
+    margin-left:20px;
+    padding:20px;
+    border:3px solid blue;
+}

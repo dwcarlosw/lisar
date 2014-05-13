@@ -1,0 +1,35 @@
+{% load i18n %}
+
+<comments id="comment-{{ atc.model_content_type }}-{{ atc.art.id }}">
+    {% for cmt in atc.cmts %}
+        <div>
+            <p>{{ cmt.text }}</p>
+            <p align="right">{{ cmt.created_by }}</p>
+            <p align="right">{{ cmt.created }}</p>
+        </div>
+    {% endfor %}
+</comments>
+
+
+<form action="" method="post" class="form">
+    {% csrf_token %}
+
+{#    {% trans "Add Comments:" %}<br/>#}
+{#    <textarea rows="3" cols="20" wrap="physical" name="new_comment" id="new_comment-{{ atc.model_content_type }}-{{ atc.art.id }}"></textarea><br/>#}
+
+    {{ form.non_field_errors }}
+    <div class="fieldWrapper">
+        {{ form.subject.errors }}
+        <label for="id_subject">Add Comment:</label>
+        {{ form.comment }}
+    </div>
+    <button type="submit" class="btn btn-primary add-comment" id="subc-{{ atc.art.id }}" name="{{ atc.model_content_type }}">
+        Submit
+    </button>
+</form>
+{##}
+{#<form action='' method="post">#}
+{##}
+{#    <textarea rows="3" cols="20" wrap="physical" name="new_comment" id="new_comment-{{ atc.model_content_type }}-{{ atc.art.id }}"></textarea><br/>#}
+{#    <button type="button" class="add-comment" id="subc-{{ atc.art.id }}" name="{{ atc.model_content_type }}">Save</button>#}
+{#</form>#}

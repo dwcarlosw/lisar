@@ -1,0 +1,143 @@
+<style type="text/css">
+    article comments div{
+        clear:both;
+        margin: 10px;
+        margin-right: 500px;
+        padding: 5px;
+        background: rgba(245, 245, 75, 0.3);
+        box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+    }
+
+    aside comments div{
+        clear:both;
+        margin-left: -10px;
+        margin-right: -5px;
+        padding: 5px;
+        background: rgba(245, 245, 75, 0.3);
+        box-shadow: 10px 10px 5px rgba(0, 0, 0, 0.5);
+    }
+
+
+    textarea[name=new_comment] {
+       resize: none;
+    }
+</style>
+
+<script type="text/javascript">
+    comment = '{% url "comment-list" %}';
+
+    $(document).ready(function() {
+        //get csrf token. Taken from docs https://docs.djangoproject.com/en/dev/ref/contrib/csrf/
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+{#        {% for atc in results.articles.articles %}#}
+{#            refresh_comment({{atc.art.id}});#}
+{#        {% endfor %}#}
+    });
+
+
+    $(function() {
+
+        window.addEventListener( 'load', initCommentSubmit, false );
+        function initCommentSubmit(){
+            add_comment_submit = document.getElementsByClassName("add-comment");
+            for(var i=0; i<add_comment_submit.length; ++i){
+                add_comment_submit[i].addEventListener("click", create_comment, false );
+            }
+        }
+    });
+
+
+    function create_comment(e) {
+        var id = e.target.id.split("-")[1];
+        var content_type = e.target.name;
+        var new_comment_id = "new_comment-"+content_type+"-"+id;
+
+        var jqxhr = $.ajax({
+            type: 'POST',
+            url: comment,
+            data: JSON.stringify( get_new_comment(id, new_comment_id, content_type) ),
+            contentType: 'application/json; charset=utf-8',
+            dataType:'json'
+        });
+
+        jqxhr.done(function(data){
+//            var text = "<p>"+data['text']+"</p>";
+ //           var user = '<p align="right">--' + '{{ user }}'+"</p>";
+  //          var content = '<div>'+text+user+'</div>';
+    //        $('#comment-'+id).append(content);
+
+
+            refresh_comment(content_type, id);
+        });
+
+        jqxhr.fail(function(data) {
+            alert(data['responseText']);
+        });
+    };
+
+    function get_new_comment ( object_id, new_comment_id, content_type ) {
+        return {'text':$('#'+new_comment_id).val(),
+                'content_type':content_type,
+                'object_id':object_id,
+                'created_by':'{{ user }}'
+                };
+    };
+
+
+    function refresh_comment(content_type, id){
+
+        var jqxhr = $.ajax({
+            type: 'GET',
+            url: comment,
+            data: {object_id:id},
+            contentType: 'application/json; charset=utf-8',
+            dataType:'json'
+        });
+
+        jqxhr.done(function(data){
+            $('#comment-'+content_type+'-'+id).empty();
+            for(var i=0; i<data.length; i++){
+                var text = "<p>"+data[i]['text']+"</p>";
+                var user = '<p align="right">--' + data[i]['created_by']+"</p>";
+                var date_time = '<p align="right">' + data[i]['created']+"</p>";
+                var content = '<div>'+text+user+date_time+'</div>';
+                $('#comment-'+content_type+'-'+id).append(content);
+            }
+    //        alert(data['text']);
+        });
+
+        jqxhr.fail(function(data) {
+            alert(data['responseText']);
+        });
+    };
+
+
+</script>

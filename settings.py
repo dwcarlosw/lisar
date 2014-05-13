@@ -35,7 +35,8 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
 
 # Application definition
 INSTALLED_APPS = (
@@ -48,33 +49,71 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.comments',
+
+    # third party library
     'rest_framework',
-    # 'dh5bp',
-    'bobthings',
-    'translate',
+    'south',
+    'mptt',
+    'django_mptt_admin',
+    'modeltranslation',
     'rosetta',
+    'reversion',
+    'reversion_compare',
+    'xadmin',
+    'crispy_forms',
+    'taggit',
+    'filer',
+    # 'dh5bp',
+
+
+    'bobthings',
+    'project_lisar',
+    'ticketing',
+    '_misc',
+    'translate',
+
     # 'tagging',
-    # 'mptt',
+    # 'cms',
+
+    # 'bootstrap3',
+    # 'menus',
+    # 'south',
+    # 'sekizai',
 )
 
 # For blog.
 TEMPLATE_CONTEXT_PROCESSORS = (
   'django.contrib.auth.context_processors.auth',
   # 'django.core.context_processors.i18n',
+  "django.core.context_processors.static",
   'django.core.context_processors.request',
+  # "account.context_processors.account", # used by django-user-accounts
+)
+
+TEMPLATE_DIRS = (
+	# The docs say it should be absolute path: PROJECT_PATH is precisely one.
+	os.path.join(BASE_DIR, "project_lisar/templates"),
+    os.path.join(BASE_DIR, "ticketing/templates"),
 )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
     # To let each individual user specify which language he or she prefer,
     # It should come after SessionMiddleware, And it should come before CommonMiddleware
     # If you use CacheMiddleware, put LocaleMiddleware after it.
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+
+    'reversion.middleware.RevisionMiddleware',
+
+    #require users to log in to access site
+    'project_lisar.middleware.EnforceLoginMiddleware',
+
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
 
 )
 
@@ -87,16 +126,24 @@ WSGI_APPLICATION = 'wsgi.application'
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE' : 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'lisar',
+        'USER': os.environ['LOCAL_DB_USER'],
+        'PASSWORD': os.environ['LOCAL_DB_PASS'],
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
 
 TIME_ZONE = 'UTC'
@@ -106,6 +153,22 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+#model translation
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('fr', gettext('French')),
+    ('zh-cn', gettext('Chinese Simplified')),
+)
+MODELTRANSLATION_DEFAULT_LANGUAGE = ('en')
+
+MODELTRANSLATION_TRANSLATION_FILES = (
+    'bobthings.translation',
+    'ticketing.translation'
+)
+
+# MODELTRANSLATION_CUSTOM_FIELDS = ('MyField', 'MyOtherField',)
 
 
 # Static files (CSS, JavaScript, Images)
@@ -117,18 +180,30 @@ STATIC_URL = '/static/'
 
 
 STATICFILES_DIRS = (
-    BASE_DIR+"/static",
+    BASE_DIR+"/project_lisar/static",
+    BASE_DIR+"/project_lisar/static/css",
+    BASE_DIR+"/project_lisar/static/js",
+    BASE_DIR+"/project_lisar/static/images",
+
     BASE_DIR+"/bobthings/static/js",
     BASE_DIR+"/bobthings/static/css",
+
+    BASE_DIR+"/ticketing/static/css",
 )
 
 LOCALE_PATHS = (
+    BASE_DIR+'/project_lisar/locale',
     BASE_DIR+'/translate/locale',
     BASE_DIR+'/bobthings/locale',
 )
 
+FIXTURE_DIRS = (
+   BASE_DIR+'/bobthings/fixtures/',
+)
 
-
-# Rosetta setts
+# Rosetta settings
 
 ROSETTA_MESSAGES_PER_PAGE = 10
+ROSETTA_REQUIRES_AUTH = True
+LOGIN_URL = '/api-auth/login/' # page for logging into rosetta
+LOGOUT_URL = '/admin/logout/'

@@ -2,12 +2,16 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
-from bobthings.models import Article, SideNew
-from bobthings.serializer import ArticleSerializer,SideNewSerializer
+from bobthings.models import Article, SideNew, Comment
+from bobthings.serializer import ArticleSerializer,SideNewSerializer, CommentSerializer
+from django.contrib.contenttypes.models import ContentType
+
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
+from rest_framework.views import APIView
+from rest_framework import status
 
 from rest_framework import viewsets
 from rest_framework import permissions
@@ -18,8 +22,10 @@ from django.contrib.auth.models import User
 from bobthings.serializer import UserSerializer
 from functools import wraps
 from django.views.decorators.cache import patch_cache_control
-import itertools
+from django.conf import settings
+from django import forms
 
+from django.http import Http404
 
 from django.utils.translation import ugettext as _
 
@@ -27,17 +33,17 @@ from django.utils.translation import ugettext as _
 #django_rosetta
 
 def never_cache(decorated_function):
-	'''
-	Removes view caching
-	'''
-	@wraps(decorated_function)
-	def wrapper(*args, **kwargs):
-		response = decorated_function(*args, **kwargs)
-		patch_cache_control(
-		response, no_cache=True, no_store=True, must_revalidate=True,
-			max_age=0)
-		return response
-	return wrapper
+    '''
+    Removes view caching
+    '''
+    @wraps(decorated_function)
+    def wrapper(*args, **kwargs):
+        response = decorated_function(*args, **kwargs)
+        patch_cache_control(
+        response, no_cache=True, no_store=True, must_revalidate=True,
+            max_age=0)
+        return response
+    return wrapper
 
 
 
@@ -87,6 +93,34 @@ class SideNewViewSet(viewsets.ModelViewSet):
     def pre_save(self, obj):
         obj.owner = self.request.user
 
+
+class CommentViewSet(viewsets.ModelViewSet):
+    """
+    This viewset automatically provides `list`, `create`, `retrieve`,
+    `update` and `destroy` actions.
+
+    Additionally we also provide an extra `highlight` action.
+    """
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+    #                       IsOwnerOrReadOnly,)
+
+    # renderer_classes = (renderers.JSONRenderer, renderers.TemplateHTMLRenderer)
+    #
+    # def list(self, request, *args, **kwargs):
+    #     response = super(SideNewViewSet, self).list(request, *args, **kwargs)
+    #     if request.accepted_renderer.format == 'html':
+    #         return Response({'articles': response.data}, template_name='index.html')
+
+    def pre_save(self, obj):
+        obj.created_by = self.request.user
+        obj.owner = self.request.user
+
+
+class CommentForm(forms.Form):
+    comment = forms.CharField()
+
 from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from models import *
@@ -98,22 +132,65 @@ class IndexView(ListAPIView):
     renderer_classes = (renderers.JSONRenderer, renderers.TemplateHTMLRenderer)
 
     def list(self, request, *args, **kwargs):
-        articles = Article.objects.all()
-        sidenews = SideNew.objects.all()
+        articles = Article.objects.order_by("-created")
+        sidenews = SideNew.objects.order_by("-created")
 
-        results = {"articles":[], "sidenews":[], "trans":_("Hello there.")}
+        if request.user.is_authenticated():
+            user = request.user.username
+        else:
+            user = ""
 
-        entries = list(chain(articles, sidenews)) # combine the two querysetss
-        for entry in entries:
-            #type = entry.__class__.__name__.lower() # 'nurse', 'pilot'
-            if isinstance(entry, Article):
-                serializer = ArticleSerializer(entry)
-                results["articles"].append( serializer.data )
-            if isinstance(entry, SideNew):
-                serializer = SideNewSerializer(entry)
-                results["sidenews"].append( serializer.data )
+        article_type = ContentType.objects.get_for_model(Article)
+        sidenew_type = ContentType.objects.get_for_model(SideNew)
+        results = {"articles":[],
+                   "sidenews":[],
+                   "user":user,
+                   "logout_url":settings.LOGOUT_URL,
+                   "form":CommentForm()}
 
-        return Response({"results":results},template_name='index.html')
+        for entry in articles:
+            article_serializer = ArticleSerializer(entry)
+            ct = entry.model_content_type
+            pk = entry.pk
+            comments = Comment.objects.filter(content_type=ct, object_id=pk)
+            cmts = []
+            for cmt in comments:
+                cmt_serializer = CommentSerializer(cmt)
+                cmts.append( cmt_serializer.data )
+            art_cmt = { "art":article_serializer.data,
+                        "cmts":cmts,
+                        "model_content_type": article_type.id}
+            results["articles"].append( art_cmt )
+
+
+        for entry in sidenews:
+            sdn_serializer = SideNewSerializer(entry)
+            ct = entry.model_content_type
+            pk = entry.pk
+            comments = Comment.objects.filter(content_type=ct, object_id=pk)
+            cmts = []
+            for cmt in comments:
+                cmt_serializer = CommentSerializer(cmt)
+                cmts.append( cmt_serializer.data )
+            sdn_cmt = {"art":sdn_serializer.data,
+                        "cmts":cmts,
+                        "model_content_type": sidenew_type.id}
+            results["sidenews"].append( sdn_cmt )
+
+
+        # entries = list(chain(articles, sidenews)) # combine the two querysets
+        # for entry in entries:
+        #     if isinstance(entry, Article):
+        #         print type(Article)
+        #         serializer = ArticleSerializer(entry)
+        #         results["articles"]["articles"].append( serializer.data )
+        #     if isinstance(entry, SideNew):
+        #         serializer = SideNewSerializer(entry)
+        #         results["sidenews"]["sidenews"].append( serializer.data )
+
+        # print results
+
+        return Response(results,template_name='bobthings.html')
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
@@ -129,7 +206,7 @@ from django.utils.decorators import method_decorator
 
 class BobthingsView(ListView):
 
-    template_name = 'index.html'
+    template_name = 'bobthings.html'
     context_object_name = 'results'
 
     def get_context_data(self, **kwargs):
@@ -140,23 +217,57 @@ class BobthingsView(ListView):
 
     def get_queryset(self):
         articles = Article.objects.all()
-        articles.order_by('id')
+        articles.order_by('created')
         sidenews = SideNew.objects.all()
-        sidenews.order_by('id')
+        sidenews.order_by('created')
 
         query= {"articles": articles,
                 "sidenews": sidenews}
 
         return query
 
-	def get_paginate_by(self, queryset):
+    def get_paginate_by(self, queryset):
 
-		self.paginate_by = self.request.GET.get('limit', 20)
-		return self.paginate_by
+        self.paginate_by = self.request.GET.get('limit', 20)
+        return self.paginate_by
 
-	@method_decorator(never_cache)
-	def get(self, request, *args, **kwargs):
-		return super(BobthingsView, self).get(request, *args, **kwargs)
+    @method_decorator(never_cache)
+    def get(self, request, *args, **kwargs):
+        return super(BobthingsView, self).get(request, *args, **kwargs)
+
+
+
+# class Comment(APIView):
+#
+#     def get_object(self, pk):
+#         try:
+#             return Comment.objects.get(pk=pk)
+#         except Comment.DoesNotExist:
+#             raise Http404
+#
+#     def get(self, request, pk, format=None):
+#         comment = self.get_object(pk)
+#         serializer = CommentSerializer(comment)
+#         return Response(serializer.data)
+#
+#     def post(self, request, format=None):
+#
+#         data=request.DATA
+#
+#         if request.user.is_authenticated():
+#             data["created_by"] = request.user.id
+#             data["updated_by"] = request.user.id
+#         else:
+#             return Response("require authentication", status=status.HTTP_400_BAD_REQUEST)
+#
+#         serializer = CommentSerializer(data=data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             #bobthings_comment.content_type_id may not be NULL
+#             print serializer.data
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # class JSONResponse(HttpResponse):

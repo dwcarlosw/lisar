@@ -1,0 +1,120 @@
+{% load i18n %}
+{% load static %}
+
+<img id="footer_arrow" src="{% static "arrow.png" %}" width="100px" height="20px">
+<div id="footer">
+    <ul id="footer_menu">
+        <li class="homeButton"><a href="/bobthings/"></a></li>
+
+        <!-- Account Button -->
+        <li class="menu_item"><a href="#">{% trans "Account" %}</a>
+            <div id = "item_msg" class="one_column_layout">
+                <div class="col_1">
+                    <a class="headerLinks">{% trans "Stream" %}</a>
+
+                    <a class="headerLinks">{% trans "Messages" %}</a>
+                    <a class="listLinks" style="font-weight:bold;color:white;">{% trans "Inbox (5)" %}</a>
+                    <a class="listLinks">{% trans "Sent" %}</a>
+                    <a class="listLinks">{% trans "Trash" %}</a>
+                    <a class="listLinks">{% trans "Compose" %}</a>
+                </div>
+            </div>
+        </li>
+
+        <!-- Profile Button -->
+        <li class="menu_item"><a href="#">{% trans "Profile" %}</a>
+            <div class="three_column_layout">
+
+                <div class="col_3">
+                    <h2>{% trans "Example of Three Columns" %}</h2>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="col_1">
+                    <p>{% trans "I love tuba so much" %}</p>
+                </div>
+                <div class="col_1">
+                    <p>{% trans "I love bacon so much" %}</p>
+                </div>
+                <div class="col_1">
+                    <p>{% trans "I love yo mama so much" %}</p>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="col_1">
+                    <p class="black_box">{% trans "I am a single column black box" %}</p>
+                </div>
+                <div class="col_2">
+                    <p>{% trans "I am outside the black box but on the same row" %}</p>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="col_3">
+                    <h2>{% trans "My Profile" %}</h2>
+                </div>
+
+                <div class="clear"></div>
+
+                <div class="col_3">
+                    <p>
+                        <img src="#" class="img_left whiteBorder" />
+                        <a href="#" style="display:inline;font-weight:bold;color:white;">Carlos Yiqiu Wang</a>
+                        <a href="#">{% trans "Read more..." %}</a>
+                    </p>
+                </div>
+
+            </div>
+        </li>
+
+        <!-- Program Button -->
+        <li class="menu_item"><a href="#">{% trans "Applications" %}</a>
+            <ul class="dropup">
+                <li><a href="#">{% trans "Group Chat" %}</a></li>
+                <li><a href="#">{% trans "Instant Messenger" %}</a></li>
+                <li><a href="#">{% trans "Meme Generator" %}</a></li>
+                <li><a href="#">{% trans "Forum" %}</a></li>
+            </ul>
+        </li>
+
+        <!-- Program Button -->
+        <li class="menu_item"><a href="#">{% trans "Languages" %}</a>
+            <ul class="dropup">
+                <li><a class="lan_a" href="#" onclick="on_choose_language(this);">English</a></li>
+                <li><a class="lan_a" href="#" onclick="on_choose_language(this);">Chinese Simplified</a></li>
+                <li><a class="lan_a" href="#" onclick="on_choose_language(this);">French</a></li>
+            </ul>
+        </li>
+
+        <!-- Log Out Button -->
+        <li class="right"><a href="{{ logout_url }}">{% trans "Log Out" %}</a></li>
+
+    </ul>
+
+    <ul id="notifications">
+        <li><a href="#" class="notificationIcons"><img src="#"></a></li>
+        <li><a href="#" class="notificationIcons"><img src="#"></a></li>
+        <li>
+            <a href="#" class="notificationIcons"><img src="#">
+                <span>
+                    <img src="{{STATIC_URL}}me.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                    <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                    {% trans 'liked your post "My name is Yiqiu this is a post":' %}
+                    <hr style="border:none;border-bottom:1px solid #777777;" />
+                    <img src="{{STATIC_URL}}me.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                    <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                    {% trans 'liked your post "My name is Yiqiu this is a post":' %}
+                    <hr style="border:none;border-bottom:1px solid #777777;" />
+                    <img src="{{STATIC_URL}}me.jpg" style="float:left; width:24px; margin-right:5px;"/>
+                    <div style="display:inline; color:#cc0000; font-weight:bold;">Emily May</div>
+                    {% trans 'liked your post "My name is Yiqiu this is a post":' %}
+                    <hr style="border:none;border-bottom:1px solid #777777;" />
+                </span>
+            </a>
+        </li>
+    </ul>
+
+ </div>
+

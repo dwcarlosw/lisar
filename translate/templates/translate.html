@@ -1,26 +1,91 @@
 {% load i18n %}
+
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>
-        translate
-    </title>
+    <title>translate</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
+
+    <!--Bootstrap 3.1.1-->
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script type="text/javascript">
+        (function(d, s, id) {
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) return;
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    </script>
+
 </head>
 <body>
-    <p>{% trans "This is the title." %}</p>
-    <p>{% trans context %}</p>
+{#    <script src="js/bootstrap.min.js"></script>#}
 
-    {% get_available_languages as languages %}
-    {% trans "View this category in:" %}
-    {% for lang_code, lang_name in languages %}
-        <p>
-            {% language lang_code %}
-                {{ lang_code }} -- {{ lang_name }}
+{#    <div id="fb-root"></div>#}
+    <div id="div_header" >
+        <header id="top_header">
+            <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+                <ul class="nav navbar-nav">
+                    <li><a href="new.html" class="navbar-brand"><img src="logo.png"></a></li>
+                    <li class="active"><a href="/translate/">Home</a></li>
+                    <li><a href="#">Price</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="socials"><g:plusone annotation="inline" width="150"></g:plusone></li>
+                            <li class="socials"><div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" data-width="The pixel width of the plugin" data-height="The pixel height of the plugin" data-colorscheme="light" data-layout="standard" data-action="like" data-show-faces="true" data-send="false"></div></li>
+                            <li class="socials">
+                                <a href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
+                                <script>
+                                    !function(d,s,id){
+                                        var js,fjs=d.getElementsByTagName(s)[0];
+                                        if(!d.getElementById(id)){
+                                            js=d.createElement(s);
+                                            js.id=id;
+                                            js.src="//platform.twitter.com/widgets.js";
+                                            fjs.parentNode.insertBefore(js,fjs);
+                                        }
+                                    }
+                                    (document,"script","twitter-wjs");
+                                </script>
+                            </li>
+                       </ul>
+                    </li>
+                </ul>
+            </nav>
+
+        </header>
+    </div>
+
+
+
+
+
+
+
+{#    <p>{% trans "This is the title." %}</p>#}
+{#    <p>{% trans context %}</p>#}
+{##}
+{#    {% get_available_languages as languages %}#}
+{#    {% trans "View this category in:" %}#}
+{#    {% for lang_code, lang_name in languages %}#}
+{#        <p>#}
+{#            {% language lang_code %}#}
+{#                {{ lang_code }} -- {{ lang_name }}#}
 {#                <a href="{% url 'category' slug=category.slug %}">{{ lang_name }}</a>#}
-            {% endlanguage %}
-        </p>
-    {% endfor %}
-
+{#            {% endlanguage %}#}
+{#        </p>#}
+{#    {% endfor %}#}
 </body>
 </html>

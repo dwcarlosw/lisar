@@ -25,3 +25,37 @@ from django.conf.urls import patterns, url
 #     url(r'^select/(?P<langid>[\w\-_\.]+)/(?P<idx>\d+)/$', 'lang_sel', name='rosetta-language-selection'),
 #     url(r'^translate/$', 'translate_text', name='translate_text'),
 # )
+
+class Organization(object):
+    name = ""
+    country = ""
+
+
+class Product(object):
+    def __init__(self, id, org, name):
+        self.id = id
+        self.Organization = org
+        self.name = name
+
+class Alternate(object):
+    def __init__(self, ct, id, field, value):
+        self.content_type = ct
+        self.object_id = id
+        self.name_value = {field:value}
+
+
+        if globals()[field] == Organization:
+            print "invalid field"
+            return
+
+
+
+p = Product(0, Organization(), "broadconnect")
+
+
+Alternate(p.__class__.__name__, p.id, "Organization", "BC")
+
+
+a_name = Alternate(p.__class__.__name__, p.id, "name", "siptrunk")
+
+

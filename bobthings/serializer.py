@@ -5,7 +5,7 @@ from rest_framework import serializers
 
 from django.forms import widgets
 from rest_framework import serializers
-from bobthings.models import Article, SideNew
+from bobthings.models import Article, SideNew, Comment
 from django.contrib.auth.models import User
 
 class ArticleSerializer(serializers.ModelSerializer):
@@ -27,7 +27,14 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'username', 'news')
+        fields = ('id', 'username')
+
+class CommentSerializer(serializers.ModelSerializer):
+    created_by = serializers.Field(source='created_by.username')
+    #created = serializers.Field(required=False)
+    class Meta:
+        model = Comment
+        fields = ('id', 'text', 'content_type', 'object_id', 'created_by', 'updated_by', 'created')
 
 
 # class NewsSerializer(serializers.Serializer):
